@@ -19,7 +19,7 @@
       }
     },
     created() {
-      axios.get(`http://localhost:3000/cocktails/${this.$route.params.id}.json`)
+      axios.get(process.env.VUE_APP_API_HOST +`/cocktails/${this.$route.params.id}.json`)
         .then(res => this.cocktail = res.data)
         .catch(err => console.log(err))
     }

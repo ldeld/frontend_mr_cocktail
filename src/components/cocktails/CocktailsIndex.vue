@@ -21,11 +21,7 @@ export default {
     }
   },
   created() {
-    axios.get("http://localhost:3000/cocktails.json", {
-      headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000'
-      }
-    }).then(res => this.cocktails = res.data)
+    axios.get(process.env.VUE_APP_API_HOST + "/cocktails.json").then(res => this.cocktails = res.data)
       .catch(err => console.log(err))
   }
 }
