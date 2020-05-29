@@ -9,6 +9,7 @@
       <input type="file" @change="setFile" name="cocktail[photo]">
       <div class="cocktail-ingredient">
         <select name="cocktail[cocktail_ingredients_attributes][][ingredient_id]">
+          <option disabled selected value>Select an ingredient</option>
           <option v-for="ingredient in ingredients" :key="ingredient.id" :value="ingredient.id">{{ ingredient.name }}</option>
         </select>
         <input type="text" name="cocktail[cocktail_ingredients_attributes][][dose]">
@@ -25,21 +26,19 @@ export default {
   props: { isOpen: Boolean },
   data() {
     return {
-      ingredients: [{}, { name: "Rum", id: 31}],
-      cocktail: {
-        name: null,
-        photo: null,
-        cocktail_ingredients_attributes: [
-          { dose: null, ingredient_id: null }
-        ]
-      }
+      ingredients: [],
     }
+  },
+  created() {
+    this.$api.get('/ingredients')
+      .then(res => this.ingredients = res.data)
+      .catch(err => console.log(err))
   },
   methods: {
     handleSubmit() {
       this.$api.post('/cocktails', new FormData(this.$refs.cocktailForm))
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err))
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
     },
     setFile(event) {
       this.cocktail.photo = event.target.files[0];
