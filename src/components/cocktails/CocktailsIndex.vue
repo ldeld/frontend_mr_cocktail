@@ -1,15 +1,13 @@
-
 <template>
-  <div class="cocktails-wrapper">
-    <div v-for="cocktail in cocktails" :key="cocktail.id" class="cocktail-item">
-      <CocktailCard :cocktail="cocktail"/>
+  <div class="cocktails-content">
+    <div class="cocktails-wrapper">
+      <CocktailCard v-for="cocktail in cocktails" :key="cocktail.id" :cocktail="cocktail"/>
     </div>
   </div>
 </template>
 
 
 <script>
-import axios from 'axios'
 import CocktailCard from './CocktailCard.vue'
 
 export default {
@@ -21,7 +19,8 @@ export default {
     }
   },
   created() {
-    axios.get(process.env.VUE_APP_API_HOST + "/cocktails.json").then(res => this.cocktails = res.data)
+    this.$api.get("/cocktails")
+      .then(res => this.cocktails = res.data)
       .catch(err => console.log(err))
   }
 }
@@ -29,6 +28,16 @@ export default {
 </script>
 
 <style>
+.cocktails-content {
+  display: flex;
+  justify-content: center;
+}
 
+.cocktails-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 80%;
+}
 
 </style>

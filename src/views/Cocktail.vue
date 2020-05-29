@@ -1,6 +1,6 @@
 <template>
   <div class="cocktail show">
-    <img v-if="cocktail.image_url" :src="cocktail.image_url" :alt="cocktail.name + ' image'" class="cocktail-show-image">
+    <img v-if="cocktail.id" :src="getCocktailImageSource()" :alt="cocktail.name + ' image'" class="cocktail-show-image">
     <h1>{{cocktail.name}}</h1>
     <p :key="ingredient.name" v-for="ingredient in cocktail.ingredients">
       {{ingredient.name}} - {{ ingredient.dose }}
@@ -9,8 +9,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   export default {
     name: 'cocktail',
     data() {
@@ -18,8 +16,13 @@
         cocktail: {}
       }
     },
+    methods: {
+      getCocktailImageSource() {
+        return this.cocktail.image_url || require('../assets/cocktail_placeholder.jpg')
+      }
+    },
     created() {
-      axios.get(process.env.VUE_APP_API_HOST +`/cocktails/${this.$route.params.id}.json`)
+      this.$api.get(`/cocktails/${this.$route.params.id}`)
         .then(res => this.cocktail = res.data)
         .catch(err => console.log(err))
     }
